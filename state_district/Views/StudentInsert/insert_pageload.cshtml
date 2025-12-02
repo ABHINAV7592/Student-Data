@@ -1,0 +1,56 @@
+﻿@model state_district.Models.Insert
+<form asp-action="Insert_click" class="form-horizondal" formaction="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <strong> <label class="control-label text-danger">State:</label></strong>
+        <select asp-for="stid" asp-items="@(new SelectList(ViewBag.selstates, "Value", "Text"))" id="state-ddl" class="form-control">
+            <option value="">Select State</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <strong>
+            <label class="control-label text-danger ">District:</label>
+        </strong>
+        <select asp-for="did" id="district-ddl" class="form-control">
+            <option value="">Select District</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <strong><label class="control-label text-danger"> Name</label></strong>
+        <input asp-for="sname" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <strong> <label class="control-label text-danger">Age</label></strong>
+        <input asp-for="sage" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <strong>  <label class="control-label text-danger">Photo</label></strong>
+        <input type="file" name="singlefile" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Insert" class="btn btn-danger" />
+    </div>
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.10.2.js" type="text/javascript"></script>
+    <script>
+        $('#state-ddl').change(function () {
+            var stateid = $(this).val();
+            $.ajax({
+                url: '@Url.Action("getdistricts", "StudentInsert")',
+                data: { stateid: stateid },
+                success: function (data) {
+                    $('#district-ddl').empty();
+                    $.each(data, function (index, item) {
+                        $('#district-ddl').append('<option value="' + item.value + '">' + item.text + '</option>');
+                    });
+                }
+            });
+        });
+    </script>
+</form>
+@{
+    if (@TempData["msg"] != null)
+    {
+        <script>
+            alert('@TempData["msg"]');
+        </script>
+    }
+}
